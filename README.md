@@ -1,0 +1,1 @@
+# securing-objects-in-serverless-application-object-based-authorization-in-cognito
