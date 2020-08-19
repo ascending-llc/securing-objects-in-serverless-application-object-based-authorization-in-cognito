@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Ascending ElastiCache
+Globals:
+  Function:
+    Timeout: 600
+    Runtime: python3.7
+    Layers:
+        - !Ref Layer
+Resources:
+  LambdaAuthorizer:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/
+      Handler: authorizer.lambda_handler
+  Layer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: 's3://ascending-devops/layers/layer0818.zip'
+      CompatibleRuntimes:
+        - python3.7
+      RetentionPolicy: Delete

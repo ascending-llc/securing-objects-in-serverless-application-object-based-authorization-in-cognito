@@ -1,0 +1,10 @@
+.DS_Store
+.python-version
+Pipfile.lock
+local.py
+local2.py
+
+packaged.yaml
+lambda/test/authorizer.pyc
+
+generateToken.sh
