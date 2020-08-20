@@ -2,6 +2,7 @@ import re
 import os
 import boto3
 import redis
+import json
 
 def lambda_handler(event, context):
 
@@ -13,6 +14,7 @@ def lambda_handler(event, context):
 
     r = redis.Redis(host='172.17.0.2', port=6379, db=0)
     if r.exists(principalId):
+        print('get policy from cache')
         return r.get(principalId)
 
     tmp = event['methodArn'].split(':')
@@ -26,7 +28,7 @@ def lambda_handler(event, context):
 
     client = boto3.client('dynamodb')
     response = client.get_item(
-        TableName=os.environ.get('AUTH_TABLE'), 
+        TableName='test-auth-policy', 
         Key={'uuid': {"S": principalId}})
 
     for k,v in response['Item']['allow']['M'].items():

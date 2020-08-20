@@ -4,20 +4,20 @@ import os
 
 def addUserToAcl(event, content):
     uuid = event["request"]["userAttributes"]["sub"]
-    table = boto3.resource('dynamodb').Table(os.environ.get('AUTH_TABLE'))
+    table = boto3.resource('dynamodb').Table('test-auth-policy')
     response = table.put_item(
         Item={
             'uuid': uuid,
             'employee': {
-                'allow': [
+                'allow': {
                     '/employee': '*',
                     '/employee/' + uuid: '*'
-                ]
+                }
             },
             'paystubs': {
-                'allow': [
+                'allow': {
                     '/paystubs': '*'
-                ]
+                }
             }
         }
     )

@@ -1,6 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Ascending ElastiCache
+
 Globals:
   Function:
     Timeout: 600
@@ -13,6 +14,16 @@ Resources:
     Properties:
       CodeUri: lambda/
       Handler: authorizer.lambda_handler
+  AddUserToAcl:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/
+      Handler: acl.addUserToAcl
+  UpdateAcl:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/
+      Handler: acl.updateAcl
   Layer:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -20,3 +31,34 @@ Resources:
       CompatibleRuntimes:
         - python3.7
       RetentionPolicy: Delete
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: 2012-10-17
+        Statement: 
+          - 
+            Effect: Allow
+            Principal: 
+              Service: 
+                - lambda.amazonaws.com
+            Action: 
+              - sts:AssumeRole
+      Policies:
+        -
+          PolicyName: LambdaRolePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: Allow
+                Action: 
+                  - cloudwatch:*
+                  - s3:*
+                  - logs:*
+                  - ssm:*
+                  - dynamodb:*
+                  - cognito-idp:*
+                  - es:*
+                  - ec2:*
+                Resource: "*"

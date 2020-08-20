@@ -1,0 +1,10 @@
+{
+    "request": {
+        "userAttributes": {
+            "email": "user@example.com",
+            "email_verified": true,
+            "sub": "abcd-1234-0000"
+        }
+    },
+    "response": {}
+}
