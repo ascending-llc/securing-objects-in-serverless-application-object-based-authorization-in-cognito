@@ -11,7 +11,7 @@ def lambda_handler(event, context):
     response = client.get_user(AccessToken=token)
     principalId = response['UserAttributes'][0]['Value']
 
-    r = redis.Redis(host=os.environ.get('REDIS_HOST'), port=os.environ.get('REDIS_PORT'), db=0)
+    r = redis.Redis(host='172.17.0.2', port=6379, db=0)
     if r.exists(principalId):
         return r.get(principalId)
 
@@ -32,12 +32,8 @@ def lambda_handler(event, context):
     for k,v in response['Item']['allow']['M'].items():
         policy.allowMethod(v['S'], k)
 
-    # for k,v in response['Item']['deny']['M'].items():
-    #     policy.denyMethod(v['S'], k)
-
     authResponse = policy.build()
     print(authResponse)
-
     r.set(principalId, json.dumps(authResponse))  
     return authResponse
 

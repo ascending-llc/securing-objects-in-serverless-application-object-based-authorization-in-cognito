@@ -2,7 +2,7 @@ import json
 import boto3
 import os
 
-def lambda_handler(event, content):
+def addUserToAcl(event, content):
     uuid = event["request"]["userAttributes"]["sub"]
     table = boto3.resource('dynamodb').Table(os.environ.get('AUTH_TABLE'))
     response = table.put_item(
@@ -10,36 +10,50 @@ def lambda_handler(event, content):
             'uuid': uuid,
             'employee': {
                 'allow': [
-                    '/5': '*',
-                    '/5/*': '*'
+                    '/employee': '*',
+                    '/employee/' + uuid: '*'
                 ]
             },
             'paystubs': {
                 'allow': [
-                    '1': '*',
-                    '2': '*'
+                    '/paystubs': '*'
                 ]
             }
         }
     )
     return event
 
-def putAcl(uuid, rule):
-    table = boto3.resource('dynamodb').Table(os.environ.get('AUTH_TABLE'))
-    response = table.put_item(
-        Item={
-            'uuid': uuid,
-            'employee': {
-                'allow': [
-                    '/5': '*',
-                    '/5/*': '*'
-                ]
-            },
-            'paystubs': {
-                'allow': [
-                    '1': '*',
-                    '2': '*'
-                ]
-            }
-        }
-    )
+def updateAcl(event, content):
+    # Read dynamoDB stream from paystub table
+    for record in event['Records']:
+        principalId = record['dynamodb']['Keys']['uuid']['S']
+        
+        # If paystub record is deleted, we delete it from acl table
+        if record['eventName'] == 'REMOVE':
+            response = table.update_item(
+                # Remove paystub from acl table
+                Key={
+                    'uuid': principalId
+                },
+                UpdateExpression="set paystub.allow=:a",
+                ExpressionAttributeValues={
+                    # ':a': new paystub lists
+                },
+        )
+            
+        # Update paystub to the acl table
+        else:
+            client = boto3.client('dynamodb')
+            response = record['dynamodb']['NewImage']
+            table = boto3.resource('dynamodb').Table(os.environ.get('AUTH_TABLE'))
+            response = table.update_item(
+                # Update acl table
+                Key={
+                    'uuid': principalId
+                },
+                UpdateExpression="set paystub.allow=:a",
+                ExpressionAttributeValues={
+                    # ':a': new paystub lists
+                },
+            )
+    return event
