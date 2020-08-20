@@ -31,8 +31,11 @@ def lambda_handler(event, context):
         TableName='test-auth-policy', 
         Key={'uuid': {"S": principalId}})
 
-    for k,v in response['Item']['allow']['M'].items():
-        policy.allowMethod(v['S'], k)
+    for k, v in response['Item'].items():
+    if k != 'uuid':
+        print(v['M'])
+        for k,v in v['M']['allow']['M'].items():
+            policy.allowMethod(v['S'], k)
 
     authResponse = policy.build()
     print(authResponse)
