@@ -3,6 +3,7 @@ import boto3
 import os
 
 def addUserToAcl(event, content):
+    # Invoked by Cognito post confirmation trigger
     uuid = event["request"]["userAttributes"]["sub"]
     table = boto3.resource('dynamodb').Table('test-auth-policy')
     response = table.put_item(
@@ -10,13 +11,13 @@ def addUserToAcl(event, content):
             'uuid': uuid,
             'employee': {
                 'allow': {
-                    '/employee': '*',
-                    '/employee/' + uuid: '*'
+                    '/employee': 'GET',
+                    '/employee/' + uuid: 'GET'
                 }
             },
             'paystubs': {
                 'allow': {
-                    '/paystubs': '*'
+                    '/paystubs/1': 'GET'
                 }
             }
         }
@@ -25,8 +26,13 @@ def addUserToAcl(event, content):
 
 def updateAcl(event, content):
     # Read dynamoDB stream from paystub table
+    table = boto3.resource('dynamodb').Table('test-auth-policy')
     for record in event['Records']:
         principalId = record['dynamodb']['Keys']['uuid']['S']
+        paystubId = record['dynamodb']['NewImage']['paystub']['M']["S"]
+        paystubPolicy = {
+            "'/paystub/' + paystubId": "GET"
+        }
         
         # If paystub record is deleted, we delete it from acl table
         if record['eventName'] == 'REMOVE':
@@ -37,7 +43,7 @@ def updateAcl(event, content):
                 },
                 UpdateExpression="set paystub.allow=:a",
                 ExpressionAttributeValues={
-                    # ':a': new paystub lists
+                    ':a': paystubPolicy
                 },
         )
             
@@ -45,7 +51,7 @@ def updateAcl(event, content):
         else:
             client = boto3.client('dynamodb')
             response = record['dynamodb']['NewImage']
-            table = boto3.resource('dynamodb').Table(os.environ.get('AUTH_TABLE'))
+            
             response = table.update_item(
                 # Update acl table
                 Key={
@@ -53,7 +59,8 @@ def updateAcl(event, content):
                 },
                 UpdateExpression="set paystub.allow=:a",
                 ExpressionAttributeValues={
-                    # ':a': new paystub lists
+                    ':a': paystubPolicy
                 },
             )
+            
     return event

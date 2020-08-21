@@ -1,0 +1,39 @@
+{
+    "Records": [
+        {
+            "eventID": "7de3041dd709b024af6f29e4fa13d34c",
+            "eventName": "INSERT",
+            "eventVersion": "1.1",
+            "eventSource": "aws:dynamodb",
+            "awsRegion": "us-east-1",
+            "dynamodb": {
+                "ApproximateCreationDateTime": 1479499740,
+                "Keys": {
+                    "Timestamp": {
+                        "S": "2020-08-21:12:09:36"
+                    },
+                    "uuid": {
+                        "S": "abcd-1234-0000"
+                    }
+                },
+                "NewImage": {
+                    "Timestamp": {
+                        "S": "2016-11-18:12:09:36"
+                    },
+                    "paystub": {
+                        "M": {
+                            "S": "1"
+                        }
+                    },
+                    "uuid": {
+                        "S": "abcd-1234-0000"
+                    }
+                },
+                "SequenceNumber": "13021600000000001596893679",
+                "SizeBytes": 112,
+                "StreamViewType": "NEW_IMAGE"
+            },
+            "eventSourceARN": "arn:aws:dynamodb:us-east-1:123456789012:table/BarkTable/stream/2020-08-21T20:42:48.104"
+        }
+    ]
+}
