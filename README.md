@@ -12,7 +12,7 @@ pipenv shell
 
 #### Post Confirmation Trigger
 
-insert an item in dynamodb permission table to describe user’s permission as simple as following: sample upon user registration on Cognito.
+Insert an item in dynamodb permission table to describe user’s permission as simple as following: sample upon user registration on Cognito.
 
 `sam local invoke "AddUserToAcl" -e lambda/test/events/postConfirmationEvent.json`
 
@@ -25,6 +25,9 @@ authorizer to evaluate if it should allow or deny the user API request.
 `sam local invoke "LambdaAuthorizer" -e lambda/test/events/authorizerEvent.json`
 
 #### Update Acl
+
+When paystubs table has been changed, the DynamoDB Streams will invoke UpdateAcl function and the auth-table will be updated.
+
 `sam local invoke "UpdateAcl" -e lambda/test/events/ddbStream.json`
 
 ### Check Redis server using redis-cli
