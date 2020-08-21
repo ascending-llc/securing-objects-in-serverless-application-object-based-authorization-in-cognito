@@ -1,34 +1,3 @@
-Metadata-Version: 2.1
-Name: redis
-Version: 3.5.3
-Summary: Python client for Redis key-value store
-Home-page: https://github.com/andymccurdy/redis-py
-Author: Andy McCurdy
-Author-email: sedrik@gmail.com
-Maintainer: Andy McCurdy
-Maintainer-email: sedrik@gmail.com
-License: MIT
-Keywords: Redis,key-value store
-Platform: UNKNOWN
-Classifier: Development Status :: 5 - Production/Stable
-Classifier: Environment :: Console
-Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Operating System :: OS Independent
-Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 2
-Classifier: Programming Language :: Python :: 2.7
-Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.5
-Classifier: Programming Language :: Python :: 3.6
-Classifier: Programming Language :: Python :: 3.7
-Classifier: Programming Language :: Python :: 3.8
-Classifier: Programming Language :: Python :: Implementation :: CPython
-Classifier: Programming Language :: Python :: Implementation :: PyPy
-Requires-Python: >=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*
-Provides-Extra: hiredis
-Requires-Dist: hiredis (>=0.1.3) ; extra == 'hiredis'
-
 redis-py
 ========
 
@@ -923,5 +892,3 @@ Special thanks to:
   which some of the socket code is still used.
 * Alexander Solovyov for ideas on the generic response callback system.
 * Paul Hubbard for initial packaging support.
-
-

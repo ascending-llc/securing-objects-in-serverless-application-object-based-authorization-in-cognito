@@ -7,7 +7,6 @@ import json
 def lambda_handler(event, context):
 
     token = event['authorizationToken']
-
     client = boto3.client('cognito-idp')
     response = client.get_user(AccessToken=token)
     principalId = response['UserAttributes'][0]['Value']
@@ -32,10 +31,10 @@ def lambda_handler(event, context):
         Key={'uuid': {"S": principalId}})
 
     for k, v in response['Item'].items():
-    if k != 'uuid':
-        print(v['M'])
-        for k,v in v['M']['allow']['M'].items():
-            policy.allowMethod(v['S'], k)
+        if k != 'uuid':
+            print(v['M'])
+            for k,v in v['M']['allow']['M'].items():
+                policy.allowMethod(v['S'], k)
 
     authResponse = policy.build()
     print(authResponse)
