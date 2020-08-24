@@ -12,7 +12,7 @@ Resources:
   LambdaAuthorizer:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda/
+      CodeUri: ./
       Handler: authorizer.lambda_handler
   AddUserToAcl:
     Type: AWS::Serverless::Function

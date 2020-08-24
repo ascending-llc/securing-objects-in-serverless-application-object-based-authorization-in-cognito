@@ -39,3 +39,6 @@ redis-cli keys '*'
 
 ### Check the values of specified key in the Redis server
 `redis-cli MGET 'abcd-1234-0000'`
+
+### Authorizer Unit Test
+`python lambda/test/authorizer.py`
