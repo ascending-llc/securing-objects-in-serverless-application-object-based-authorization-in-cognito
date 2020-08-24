@@ -31,7 +31,7 @@ def updateAcl(event, content):
         principalId = record['dynamodb']['Keys']['uuid']['S']
         paystubId = record['dynamodb']['NewImage']['paystub']['M']["S"]
         paystubPolicy = {
-            "'/paystub/' + paystubId": "GET"
+            '/employee': 'GET'
         }
         
         # If paystub record is deleted, we delete it from acl table
@@ -51,16 +51,18 @@ def updateAcl(event, content):
         else:
             client = boto3.client('dynamodb')
             response = record['dynamodb']['NewImage']
-            
+           
             response = table.update_item(
                 # Update acl table
                 Key={
                     'uuid': principalId
                 },
-                UpdateExpression="set paystub.allow=:a",
+                UpdateExpression="set paystub=:a",
                 ExpressionAttributeValues={
                     ':a': paystubPolicy
                 },
+                ReturnValues="UPDATED_NEW"
             )
+            print(response)
             
     return event

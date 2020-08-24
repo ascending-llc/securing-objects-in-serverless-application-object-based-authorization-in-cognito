@@ -12,7 +12,7 @@ Resources:
   LambdaAuthorizer:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
+      CodeUri: lambda/
       Handler: authorizer.lambda_handler
   AddUserToAcl:
     Type: AWS::Serverless::Function
@@ -27,10 +27,10 @@ Resources:
   Layer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      ContentUri: 's3://ascending-devops/layers/layer0818.zip'
+      LayerName: authorizer-lib
+      ContentUri: package/.
       CompatibleRuntimes:
         - python3.7
-      RetentionPolicy: Delete
   LambdaRole:
     Type: AWS::IAM::Role
     Properties: 
