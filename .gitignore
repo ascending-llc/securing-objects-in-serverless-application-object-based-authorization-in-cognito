@@ -3,8 +3,11 @@
 Pipfile.lock
 local.py
 local2.py
+setup.py
+requirements.txt
 
 packaged.yaml
 lambda/test/authorizer.pyc
 
 generateToken.sh
+package
