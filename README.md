@@ -6,9 +6,9 @@ This repository is going to demostrate coding part of [Securing objects in serve
 
 There are three main parts of lambda function described in the blog:
 
-1. Lambda function will be triggered pre API request to control the accept or deny
+1. Lambda function will be triggered pre API request to control the accept or deny. You can refer to [Lambda Authorizer](#lambda-authorizer)
 1. Build a policy and ACL object for lambda function to determine if current user has access to requested object. You can refer to [Post Confirmation Trigger](#post-confirmation-trigger) and [Update Acl](#update-acl) for building and managing ACL.
-1. Cache the policy object to accelerate the authorization process in large scale application. You can refer to 
+1. Cache the policy object to accelerate the authorization process in large scale application. You can refer to Lambda Authorizer [Caching](#caching-the-policy).
 
 
 ## Requirements
@@ -72,6 +72,7 @@ authorizer to evaluate if it should allow or deny the user API request.
 
 `python lambda/authorizer.test.py`
 
+#### Caching the policy
 We implement the Elastic Cache strategy for future scaling in the lambda authorizer
 
 ``` python
@@ -80,7 +81,7 @@ We implement the Elastic Cache strategy for future scaling in the lambda authori
         return r.get(principalId)
 ```
 
-### About ASCENDING
+## About ASCENDING
 ASCENDING is an AWS Certified Consulting Partner. ASCENDING provides Cloud Strategic Consulting service, Cloud Migration, Cloud Operation and web/application development services to our organization clients. ASCENDING also provides IT training (on-site bootcamp and online Udemy class) to individual customers. 
 * Our recent client success [stories](https://ascendingdc.com/clientssuccesses)
 * Our training [contents](https://ascendingdc.com/services/training)
