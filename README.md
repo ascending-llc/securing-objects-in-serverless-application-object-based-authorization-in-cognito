@@ -18,6 +18,37 @@ There are three main parts of lambda function described in the blog:
 
 ## Setup
 
+### Install pyenv
+
+[pyenv](https://github.com/pyenv/pyenv) lets you easily switch between multiple versions of Python. It's simple, unobtrusive, and follows the UNIX tradition of single-purpose tools that do one thing well.
+
+In macOS, pyenv can be installed with Homebrew
+
+```bash
+brew update
+brew install pyenv
+```
+
+### Install and manage multiple versions of Python by pyenv
+
+```bash
+pyenv install 3.8.5
+pyenv versions
+pyenv local 3.8.5
+```
+
+In some versions of macOS, `pyenv install` may fail with erro `zlib from xcode sdk`. In this case, please use following command instead
+
+```bash
+CFLAGS="-I$(xcrun --show-sdk-path)/usr/include" pyenv install -v 3.8.5
+```
+
+### Create and edit Pipfile
+
+`Pipfile` and its sister `Pipfile.lock` are a replacement for the existing standard pip's requirements.txt file.
+
+For more detail about Pipfile, please [click here](https://github.com/pypa/pipfile).
+
 ### Install environment using pipenv
 
 ```
@@ -26,10 +57,11 @@ pipenv shell
 ```
 
 ### Build Lambda Dependency Layer at local
+
 To build a Lambda layer that contains the function's runtime dependencies, run `build-layer.sh`. Packaging dependencies in a layer reduces the size of the deployment package that you upload when you modify your code. You can actually find out why we use lambda layer on [youtube vlog](https://www.youtube.com/watch?v=W8aYHTVsNZQ)
 
 ```bash
-./build-layer.sh
+sh ./build-layer.sh
 ```
 
 ### Run Redis container at local to simulate ElasticCache Redis server
